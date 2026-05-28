@@ -9,6 +9,13 @@
 > 테스트: **Azure Windows VM** 의 System-Assigned Managed Identity
 > 두 경우 모두 `DefaultAzureCredential()` 로 코드 변경 없이 동작합니다.
 
+## 📂 하위 모듈
+
+| 경로 | 설명 |
+|---|---|
+| [`./sdk/`](./sdk/README.md) | ADLS Gen2 **단발 업로드** CLI 샘플 (수동/스케줄 트리거용) |
+| [`./retention/`](./retention/README.md) | **Retention 보존정책** PowerShell 스크립트 + Windows 작업 스케줄러 등록 가이드 |
+
 ---
 
 ## 0. 전체 흐름 (Flow)
@@ -228,35 +235,7 @@ Invoke-RestMethod -Headers $headers -Uri $uri | ConvertTo-Json -Depth 5
 
 ## 3. 설치 & 실행 (Windows)
 
-본 프로젝트는 **virtualenvwrapper-win** 의 `workon` 명령으로 관리되는
-가상환경 **`Watcher`** 를 사용합니다.
-
-### 3.1 virtualenvwrapper-win 설치 (최초 1회)
-
 ```powershell
-pip install virtualenvwrapper-win
-
-# (선택) WORKON_HOME 위치 지정 - 기본 %USERPROFILE%\Envs
-[Environment]::SetEnvironmentVariable("WORKON_HOME", "S:\Git\Python_venv", "User")
-```
-
-### 3.2 `Watcher` 가상환경 생성 및 활성화
-
-```powershell
-# 최초 1회: 가상환경 생성
-mkvirtualenv Watcher
-
-# 이후에는 어디서든 활성화
-workon Watcher
-```
-
-활성화되면 프롬프트가 `(Watcher) PS S:\...>` 형태로 바뀝니다.
-
-### 3.3 의존성 설치 & 실행
-
-```powershell
-workon Watcher
-
 cd S:\GitRepos\Python\FolderWatcher
 pip install -r requirements.txt
 
@@ -267,13 +246,6 @@ notepad .env
 # 실행
 python folder_watcher.py
 ```
-
-가상환경 종료는 `deactivate`, 다시 진입은 `workon Watcher`.
-
-> `workon` 이 PowerShell 에서 활성화가 지속되지 않는 경우, venv python 을 직접 호출해도 됩니다:
-> ```powershell
-> & "S:\Git\Python_venv\Watcher\Scripts\python.exe" folder_watcher.py
-> ```
 
 실행 로그 예시:
 ```
